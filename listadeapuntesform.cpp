@@ -44,12 +44,12 @@ void Listadeapuntesform::cargarDatosIniciales()
         {
             QString line = in.readLine();
             QStringList parts = line.split(",");
-            if (parts.size() >= 3) // Asegurémonos de tener al menos tres partes (asignatura, tema, término)
+            if (parts.size() >= 3) // Aseguremonos de tener al menos tres partes (asignatura, tema, termino)
             {
                 QString asignatura = parts[0].trimmed();
                 asignaturas << asignatura;
 
-                // Mapear la asignatura a sus respectivos temas y términos
+                // Mapear la asignatura a sus respectivos temas y terminos
                 temasPorAsignatura[asignatura] = parts[1].trimmed();
                 terminosPorAsignatura[asignatura] = parts[2].trimmed();
             }
@@ -64,7 +64,7 @@ void Listadeapuntesform::cargarDatosIniciales()
 
     ui->cmbAsignaturas2->addItems(asignaturas);
 
-    // Al cargar asignaturas iniciales, también cargamos los temas y términos
+    // Al cargar asignaturas iniciales, tambien cargamos los temas y términos
     actualizarTemasYTerminos(ui->cmbAsignaturas2->currentText());
 }
 
@@ -108,16 +108,16 @@ void Listadeapuntesform::cargarEnTabla(QTableWidget *tableWidget, const QStringL
 
 QStringList Listadeapuntesform::obtenerTemas(const QString &asignatura)
 {
-    return temasPorAsignatura.value(asignatura).split(';'); // Suponiendo que los temas están separados por ';'
+    return temasPorAsignatura.value(asignatura).split(';'); // Suponiendo que los temas estan separados por ';'
 }
 
 QStringList Listadeapuntesform::obtenerTerminos(const QString &asignatura)
 {
-    return terminosPorAsignatura.value(asignatura).split(';'); // Suponiendo que los términos están separados por ';'
+    return terminosPorAsignatura.value(asignatura).split(';'); // Suponiendo que los terminos están separados por ';'
 }
 void Listadeapuntesform::actualizarTemasYTerminos(const QString &asignaturaSeleccionada)
 {
-        // Obtener temas y términos de la asignatura seleccionada
+        // Obtener temas y terminos de la asignatura seleccionada
         QStringList temas = obtenerTemas(asignaturaSeleccionada);
         QStringList terminos = obtenerTerminos(asignaturaSeleccionada);
 
@@ -130,7 +130,7 @@ void Listadeapuntesform::actualizarTemasYTerminos(const QString &asignaturaSelec
             tableWidgetTema->setItem(i, 0, item);
         }
 
-        // Limpiar y cargar términos en la tabla
+        // Limpiar y cargar terminos en la tabla
         tableWidgetTermino->clearContents();
         tableWidgetTermino->setRowCount(terminos.size());
         for (int i = 0; i < terminos.size(); ++i)
