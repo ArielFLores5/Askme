@@ -40,13 +40,13 @@ void Askme::cargarDatos()
         QTextStream in(&file);
         while (!in.atEnd()) {
             QString line = in.readLine();
-            QStringList campos = line.split(',');
+            QStringList fields = line.split(',');
 
-            if (campos.size() == 4) {
-                QString asignaturaNombre = campos[0].trimmed();
-                QString temaNombre = campos[1].trimmed();
-                QString termino = campos[2].trimmed();
-                QString concepto = campos[3].trimmed();
+            if (fields.size() == 4) {
+                QString asignaturaNombre = fields[0].trimmed();
+                QString temaNombre = fields[1].trimmed();
+                QString termino = fields[2].trimmed();
+                QString concepto = fields[3].trimmed();
 
                 // Buscar la asignatura
                 Asignatura *asignatura = nullptr;
@@ -90,7 +90,7 @@ void Askme::cargarDatos()
 
 void Askme::guardar()
 {
-    QFile file("Apuntes.csv");
+    QFile file("data.csv");
     if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         QTextStream out(&file);
 
