@@ -36,7 +36,7 @@ void Listadeapuntesform::cargarDatosIniciales()
 {
     asignaturas.clear(); // Limpiamos la lista de asignaturas
 
-    QFile file("C:/Users/Ariel Flores/Music/build-askme-Desktop_Qt_6_6_0_MinGW_64_bit-Debug/data.csv");
+    QFile file("C:/Users/lab/Downloads/build-askme-Desktop_Qt_5_12_12_MinGW_64_bit-Debug/data.csv");
     if (file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
         QTextStream in(&file);
