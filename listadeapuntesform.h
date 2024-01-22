@@ -2,10 +2,9 @@
 #define LISTADEAPUNTESFORM_H
 
 #include <QWidget>
-#include <QComboBox>
-#include <QTableWidget> // Cambié esto de QListView a QListWidget
-#include <QStringList>
 #include <QMap>
+#include <QPair>
+#include <QTableWidget>  // Agrega esta línea
 
 namespace Ui {
 class Listadeapuntesform;
@@ -19,21 +18,24 @@ public:
     explicit Listadeapuntesform(QWidget *parent = nullptr);
     ~Listadeapuntesform();
 
-public slots:
-    void on_buttonBox_rejected();
-    void cargarDatosIniciales();
+private slots:
     void actualizarTemasYTerminos(const QString &asignaturaSeleccionada);
-    QStringList obtenerTemas(const QString &asignatura);
-    QStringList obtenerTerminos(const QString &asignatura);
+    void on_buttonBox_rejected();
+
+    void on_buttonBox_accepted();
+
 private:
     Ui::Listadeapuntesform *ui;
+
+    QMap<QString, QPair<QStringList, QStringList>> temasYTerminosPorAsignatura;
+
     QTableWidget *tableWidgetTema;
     QTableWidget *tableWidgetTermino;
-    QStringList obtenerAsignaturas();
-    void cargarEnTabla(QTableWidget *tableWidget, const QStringList &datos);
 
-    QStringList asignaturas;  // Agregamos estas líneas
-    QMap<QString, QString> temasPorAsignatura;
-    QMap<QString, QString> terminosPorAsignatura;
+    void cargarDatosIniciales();
+    QStringList obtenerTemas(const QString &asignatura);
+    QStringList obtenerTerminos(const QString &asignatura);
+    void cargarEnTabla(QTableWidget *tableWidget, const QStringList &datos);
 };
+
 #endif // LISTADEAPUNTESFORM_H

@@ -15,6 +15,27 @@ Askme::~Askme()
 {
     delete ui;
 }
+void Askme::on_cuestionarioCreado(Cuestionario *cuestionario)
+{
+    PreguntaForm *w = new PreguntaForm(this);
+    w->setCuestionario(cuestionario);
+    connect(w, SIGNAL(preguntasContestadas(Cuestionario*)), this, SLOT(on_preguntasContestadas(Cuestionario*)));
+    cargarSubVentana(w);
+}
+
+void Askme::on_preguntasContestadas(Cuestionario *cuestionario)
+{
+    cuestionario->terminar();
+    ResultadosForm *w = new ResultadosForm(this);
+    w->setDatos(cuestionario);
+    cargarDatos();
+    cargarSubVentana(w);
+
+
+
+    qDebug() << "Preguntas contestadas. Abriendo ResultadosForm...";
+
+}
 
 void Askme::on_apunteTomado(Apunte *apunte)
 {
@@ -139,3 +160,15 @@ void Askme::on_actionLista_triggered()
         cargarSubVentana(m_listaDeApuntesForm);
     }
 }
+
+void Askme::on_actionGenerar_triggered()
+{
+    CuestionarioForm *w = new CuestionarioForm(this);
+    w->setAsignaturas(m_asignaturas);
+    w->cargarAsignaturas();
+
+    connect(w, SIGNAL(cuestionarioCreado(Cuestionario*)), this, SLOT(on_cuestionarioCreado(Cuestionario*)));
+
+    cargarSubVentana(w);
+}
+

@@ -5,10 +5,12 @@
 #include <QMdiSubWindow>
 #include <QFile>
 #include <QTextStream>
-
+#include "cuestionarioform.h"
+#include "preguntaform.h"
 #include "apunteform.h"
 #include "asignatura.h"
 #include "listadeapuntesform.h"
+#include <resultadosform.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Askme; }
@@ -23,13 +25,15 @@ public:
     ~Askme();
 
 public slots:
-    void on_apunteTomado(Apunte *apunte);
 
+    void on_apunteTomado(Apunte *apunte);
+    void on_cuestionarioCreado(Cuestionario *cuestionario);
+    void on_preguntasContestadas(Cuestionario *cuestionario);
 private slots:
     void on_actionNuevo_triggered();
     void guardar();
     void on_actionLista_triggered();
-
+    void on_actionGenerar_triggered();
 private:
     Ui::Askme *ui;
     void cargarSubVentana(QWidget *ventana);
