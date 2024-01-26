@@ -4,8 +4,6 @@
 #include <QWidget>
 #include <QDebug>
 
-
-#include <cuestionario.h>
 #include <cuestionario.h>
 
 namespace Ui {

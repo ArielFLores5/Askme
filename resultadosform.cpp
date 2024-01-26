@@ -54,7 +54,7 @@ void ResultadosForm::cargarDatos()
     for (int i = 0; i < preguntas.size(); ++i)
     {
         QTableWidgetItem *terminoItem = new QTableWidgetItem(preguntas[i]->apunte()->termino());
-        QTableWidgetItem *correctoItem = new QTableWidgetItem(preguntas[i]->correcta() ? "Correcto" : "Falso");
+        QTableWidgetItem *correctoItem = new QTableWidgetItem(preguntas[i]->correcto() ? "Correcto" : "Falso");
 
         ui->tblResultados->setItem(i, 0, terminoItem);
         ui->tblResultados->setItem(i, 1, correctoItem);

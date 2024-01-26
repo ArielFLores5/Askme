@@ -9,18 +9,20 @@ public:
     Pregunta();
     Pregunta(Apunte *apunte);
 
-    bool correcta() const;
-    void setCorrecta(bool newCorrecta);
-    bool respondida() const;
-    void setRespondida(bool newRespondida);
+    bool correcto() const;
+    bool respuesta() const;
+    void setCorrecto(bool newCorrecto);
+    void setRespuesta(bool newRespuesta);
     Apunte *apunte() const;
     void setApunte(Apunte *newApunte);
     QString toString() const;
     void responder(QString termino);
 private:
-    bool m_correcta;
-    bool m_respondida;
+    bool m_correcto;
+    bool m_respuesta;
     Apunte *m_apunte;
+
+    //Lista de terminos
 };
 
 #endif // PREGUNTA_H

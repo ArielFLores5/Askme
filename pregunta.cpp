@@ -5,24 +5,24 @@ Pregunta::Pregunta()
 
 }
 
-bool Pregunta::correcta() const
+bool Pregunta::correcto() const
 {
-    return m_correcta;
+    return m_correcto;
 }
 
-void Pregunta::setCorrecta(bool newCorrecta)
+bool Pregunta::respuesta() const
 {
-    m_correcta = newCorrecta;
+    return m_respuesta;
 }
 
-bool Pregunta::respondida() const
+void Pregunta::setCorrecto(bool newCorrecto)
 {
-    return m_respondida;
+    m_correcto = newCorrecto;
 }
 
-void Pregunta::setRespondida(bool newRespondida)
+void Pregunta::setRespuesta(bool newRespuesta)
 {
-    m_respondida = newRespondida;
+    m_respuesta = newRespuesta;
 }
 
 Apunte *Pregunta::apunte() const
@@ -38,19 +38,19 @@ void Pregunta::setApunte(Apunte *newApunte)
 QString Pregunta::toString() const
 {
     QString str = m_apunte->toString();
-    str += ", correcta: " + QString::number(m_correcta) + ", ";
-    str += "respondida: " + QString::number(m_respondida) + "\n";
+    str += ", Correcta: " + QString::number(m_correcto) + ", ";
+    str += "Respondida: " + QString::number(m_respuesta) + "\n";
     return str;
 }
 
 void Pregunta::responder(QString termino)
 {
-    m_correcta = (termino == apunte()->termino());
-    m_respondida = true;
+    m_correcto = (termino == apunte()->termino());
+    m_respuesta = true;
 }
 
 Pregunta::Pregunta(Apunte *apunte) : m_apunte(apunte)
 {
-    m_correcta = false;
-    m_respondida = false;
+    m_correcto = false;
+    m_respuesta = false;
 }

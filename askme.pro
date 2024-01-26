@@ -1,8 +1,9 @@
 QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-
+INCLUDEPATH += $$PWD
 CONFIG += c++11
+
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -12,6 +13,7 @@ SOURCES += \
     apunte.cpp \
     apunteform.cpp \
     asignatura.cpp \
+    creditosform.cpp \
     cuestionario.cpp \
     cuestionarioform.cpp \
     listadeapuntesform.cpp \
@@ -27,6 +29,7 @@ HEADERS += \
     apunteform.h \
     asignatura.h \
     askme.h \
+    creditosform.h \
     cuestionario.h \
     cuestionarioform.h \
     listadeapuntesform.h \
@@ -38,10 +41,12 @@ HEADERS += \
 FORMS += \
     apunteform.ui \
     askme.ui \
+    creditosform.ui \
     cuestionarioform.ui \
     listadeapuntesform.ui \
     preguntaform.ui \
     resultadosform.ui
+
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -49,4 +54,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 DISTFILES += \
+    Recursos/base-de-conocimientos.png \
     diagrama.qmodel
+
+RESOURCES += \
+    Recursos/Resources.qrc

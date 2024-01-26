@@ -3,28 +3,36 @@
 
 #include <tema.h>
 #include <pregunta.h>
+#include <QRandomGenerator>
+#include <QString>
 
 class Cuestionario
 {
 public:
     Cuestionario();
-    Cuestionario(Tema *tema);
-
+    Cuestionario(QString Asignatura, Tema *tema);
     Pregunta *siguiente();
-    void terminar();
     const QStringList &terminos() const;
+    float finalizar();
+    void terminar();
     float score() const;
+
     const QList<Pregunta *> &preguntas() const;
-    const QString nombreTema() const;
-    int totalPreguntas();
+    QString nombreTema() const;
+    int totalPreguntas() const;
     bool hayMasPreguntas();
+
     int mostradas() const;
+
+    const QString &asignatura() const;
+    void setAsignatura(const QString &newAsignatura);
 
 private:
     float m_score;
     Tema *m_tema;
     QList<Pregunta*> m_preguntas;
     QStringList m_terminos;
+    QString m_asignatura;
     int m_mostradas;
 };
 

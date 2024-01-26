@@ -25,7 +25,7 @@ void Askme::on_cuestionarioCreado(Cuestionario *cuestionario)
 
 void Askme::on_preguntasContestadas(Cuestionario *cuestionario)
 {
-    cuestionario->terminar();
+    cuestionario->finalizar();
     ResultadosForm *w = new ResultadosForm(this);
     w->setDatos(cuestionario);
     cargarDatos();
@@ -172,3 +172,27 @@ void Askme::on_actionGenerar_triggered()
     cargarSubVentana(w);
 }
 
+
+void Askme::on_actionCreditos_triggered()
+{
+    // Crear una instancia de CreditosForm
+    CreditosForm *creditosForm = new CreditosForm(this);
+
+    // Mostrar la ventana de créditos como una subventana
+    QMdiSubWindow *subVentana = ui->mdiArea->addSubWindow(creditosForm);
+    subVentana->setAttribute(Qt::WA_DeleteOnClose); // La ventana se eliminará al cerrarse
+    subVentana->setWindowModality(Qt::WindowModal); // La ventana es modal (bloquea la ventana principal)
+
+    // Mostrar la subventana de créditos
+    subVentana->show();
+
+    // Establecer el tamaño deseado de la subventana
+    subVentana->resize(creditosForm->sizeHint());
+}
+
+
+
+void Askme::on_actionSalir_triggered()
+{
+    this->close();
+}

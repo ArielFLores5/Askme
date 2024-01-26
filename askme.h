@@ -11,6 +11,7 @@
 #include "asignatura.h"
 #include "listadeapuntesform.h"
 #include <resultadosform.h>
+#include "creditosform.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Askme; }
@@ -34,6 +35,10 @@ private slots:
     void guardar();
     void on_actionLista_triggered();
     void on_actionGenerar_triggered();
+    void on_actionCreditos_triggered();
+
+    void on_actionSalir_triggered();
+
 private:
     Ui::Askme *ui;
     void cargarSubVentana(QWidget *ventana);
