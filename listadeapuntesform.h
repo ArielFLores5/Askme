@@ -2,9 +2,9 @@
 #define LISTADEAPUNTESFORM_H
 
 #include <QWidget>
-#include <QMap>
-#include <QPair>
-#include <QTableWidget>  // Agrega esta línea
+#include <QTableWidget>
+
+#include <asignatura.h>
 
 namespace Ui {
 class Listadeapuntesform;
@@ -16,26 +16,19 @@ class Listadeapuntesform : public QWidget
 
 public:
     explicit Listadeapuntesform(QWidget *parent = nullptr);
+    void setAsignaturas(QList<Asignatura *> *asignaturas);
+    void cargarAsignaturas();
+    void cargarTerminos(int fila, int columna);
     ~Listadeapuntesform();
-
-private slots:
-    void actualizarTemasYTerminos(const QString &asignaturaSeleccionada);
-    void on_buttonBox_rejected();
-
-    void on_buttonBox_accepted();
 
 private:
     Ui::Listadeapuntesform *ui;
+    QList<Asignatura *> *m_asignaturas;
 
-    QMap<QString, QPair<QStringList, QStringList>> temasYTerminosPorAsignatura;
-
-    QTableWidget *tableWidgetTema;
-    QTableWidget *tableWidgetTermino;
-
-    void cargarDatosIniciales();
-    QStringList obtenerTemas(const QString &asignatura);
-    QStringList obtenerTerminos(const QString &asignatura);
-    void cargarEnTabla(QTableWidget *tableWidget, const QStringList &datos);
+private slots:
+    void cargarTemas();
+    void on_tblTemas_cellClicked(int row, int column);
 };
+
 
 #endif // LISTADEAPUNTESFORM_H

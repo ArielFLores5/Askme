@@ -1,30 +1,24 @@
 #include "listadeapuntesform.h"
 #include "ui_listadeapuntesform.h"
-#include <QFile>
-#include <QTextStream>
-#include <QMessageBox>
-#include <QPair>
 
-Listadeapuntesform::Listadeapuntesform(QWidget *parent)
-    : QWidget(parent), ui(new Ui::Listadeapuntesform)
+Listadeapuntesform::Listadeapuntesform(QWidget *parent) :
+    QWidget(parent),
+    ui(new Ui::Listadeapuntesform),
+    m_asignaturas(nullptr)
 {
     ui->setupUi(this);
+    ui->tblTemas->setColumnCount(1);
+    QStringList tituloTemas;
+    tituloTemas << "Tema";
+    ui->tblTemas->setHorizontalHeaderLabels(tituloTemas);
+    ui->tblTerminos->setColumnCount(1);
+    QStringList tituloTerminos;
+    tituloTerminos << "Termino";
+    ui->tblTerminos->setHorizontalHeaderLabels(tituloTerminos);
+    connect(ui->cmbAsignaturas, SIGNAL(currentIndexChanged(int)), this, SLOT(cargarTemas()));
+    connect(ui->tblTemas, SIGNAL(cellClicked(int, int)), this, SLOT(cargarTerminos(int, int)));
 
-    // Conectar el cambio de selección en cmbAsignaturas2 con la función correspondiente
-    connect(ui->cmbAsignaturas2, &QComboBox::currentTextChanged,
-            this, &Listadeapuntesform::actualizarTemasYTerminos);
-
-    // Configurar QTableWidgets
-    tableWidgetTema = ui->tableWidgetTema;
-    tableWidgetTema->setColumnCount(1); // Número de columnas para temas
-    tableWidgetTema->setHorizontalHeaderLabels(QStringList() << "Temas");
-
-    tableWidgetTermino = ui->tableWidgetTermino;
-    tableWidgetTermino->setColumnCount(1); // Número de columnas para términos
-    tableWidgetTermino->setHorizontalHeaderLabels(QStringList() << "Terminos");
-
-    // Cargar asignaturas y datos iniciales al iniciar la ventana
-    cargarDatosIniciales();
+    cargarAsignaturas();
 }
 
 Listadeapuntesform::~Listadeapuntesform()
@@ -32,91 +26,110 @@ Listadeapuntesform::~Listadeapuntesform()
     delete ui;
 }
 
-void Listadeapuntesform::cargarDatosIniciales()
+void Listadeapuntesform::setAsignaturas(QList<Asignatura *> *asignaturas)
 {
-    temasYTerminosPorAsignatura.clear(); // Limpiamos el mapa
+    m_asignaturas = asignaturas;
+}
 
-    QFile file("C:/Users/lab/Downloads/build-askme-Desktop_Qt_5_12_12_MinGW_64_bit-Debug/data.csv");
-    if (file.open(QIODevice::ReadOnly | QIODevice::Text))
+void Listadeapuntesform::cargarAsignaturas()
+{
+    ui->cmbAsignaturas->clear();
+
+    if (m_asignaturas)
     {
-        QTextStream in(&file);
-        while (!in.atEnd())
+        foreach(Asignatura *a, *m_asignaturas)
         {
-            QString line = in.readLine();
-            QStringList parts = line.split(",");
-            if (parts.size() >= 3) // Asegurémonos de tener al menos tres partes (asignatura, tema, término)
+            ui->cmbAsignaturas->addItem(a->nombre());
+        }
+    }
+}
+
+void Listadeapuntesform::cargarTemas()
+{
+    ui->tblTemas->clearContents();
+    ui->tblTemas->setRowCount(0);
+
+    QString nombreAsignatura = ui->cmbAsignaturas->currentText();
+
+    if (m_asignaturas)
+    {
+        Asignatura *asignaturaSeleccionada = nullptr;
+        foreach (Asignatura *a, *m_asignaturas)
+        {
+            if (a->nombre() == nombreAsignatura)
             {
-                QString asignatura = parts[0].trimmed();
-
-                // Verificamos si la asignatura ya está en el mapa
-                if (!temasYTerminosPorAsignatura.contains(asignatura))
-                {
-                    // Si no está, la agregamos al mapa con listas vacías de temas y términos
-                    temasYTerminosPorAsignatura[asignatura] = qMakePair(QStringList(), QStringList());
-                }
-
-                // Agregamos el tema y término a las listas correspondientes de la asignatura
-                temasYTerminosPorAsignatura[asignatura].first.append(parts[1].trimmed()); // Temas
-                temasYTerminosPorAsignatura[asignatura].second.append(parts[2].trimmed()); // Términos
+                asignaturaSeleccionada = a;
+                break;
             }
         }
 
-        file.close();
+        if (asignaturaSeleccionada)
+        {
+            QList<Tema *> temas = asignaturaSeleccionada->temas();
+
+            int fila = 0;
+            foreach (Tema *t, temas)
+            {
+                // Insertar fila en la tabla de temas
+                ui->tblTemas->insertRow(fila);
+                ui->tblTemas->setItem(fila, 0, new QTableWidgetItem(t->nombre()));
+                fila++;
+            }
+        }
     }
-    else
+
+    // Limpiar y reiniciar la tabla de términos
+    ui->tblTerminos->clearContents();
+    ui->tblTerminos->setRowCount(0);
+}
+
+void Listadeapuntesform::cargarTerminos(int fila, int columna)
+{
+    ui->tblTerminos->clearContents();
+    ui->tblTerminos->setRowCount(0);
+
+    if (fila >= 0)
     {
-        QMessageBox::critical(this, "Error", "No se pudo abrir el archivo CSV.");
+        QString nombreAsignatura = ui->cmbAsignaturas->currentText();
+        QString nombreTema = ui->tblTemas->item(fila, columna)->text();
+
+        if (m_asignaturas)
+        {
+            Asignatura *asignaturaSeleccionada = nullptr;
+            foreach (Asignatura *a, *m_asignaturas)
+            {
+                if (a->nombre() == nombreAsignatura)
+                {
+                    asignaturaSeleccionada = a;
+                    break;
+                }
+            }
+
+            if (asignaturaSeleccionada)
+            {
+                QList<Tema *> temas = asignaturaSeleccionada->temas();
+                foreach (Tema *t, temas)
+                {
+                    if (t->nombre() == nombreTema)
+                    {
+
+                        QList<Apunte *> apuntes = t->apuntes();
+                        int filaTerminos = 0;
+                        foreach (Apunte *ap, apuntes)
+                        {
+                            ui->tblTerminos->insertRow(filaTerminos);
+                            ui->tblTerminos->setItem(filaTerminos, 0, new QTableWidgetItem(ap->termino()));
+                            filaTerminos++;
+                        }
+                        break;
+                    }
+                }
+            }
+        }
     }
-
-    ui->cmbAsignaturas2->addItems(temasYTerminosPorAsignatura.keys());
-
-    // Al cargar asignaturas iniciales, también cargamos los temas y términos
-    actualizarTemasYTerminos(ui->cmbAsignaturas2->currentText());
 }
 
-void Listadeapuntesform::actualizarTemasYTerminos(const QString &asignaturaSeleccionada)
+void Listadeapuntesform::on_tblTemas_cellClicked(int row, int column)
 {
-    // Obtener temas y términos de la asignatura seleccionada
-    QStringList temas = obtenerTemas(asignaturaSeleccionada);
-    QStringList terminos = obtenerTerminos(asignaturaSeleccionada);
-
-    // Limpiar y cargar temas en la tabla
-    cargarEnTabla(tableWidgetTema, temas);
-
-    // Limpiar y cargar términos en la tabla
-    cargarEnTabla(tableWidgetTermino, terminos);
+    cargarTerminos(row, column);
 }
-
-void Listadeapuntesform::cargarEnTabla(QTableWidget *tableWidget, const QStringList &datos)
-{
-    tableWidget->clearContents();
-    tableWidget->setRowCount(datos.size());
-
-    for (int i = 0; i < datos.size(); ++i)
-    {
-        QTableWidgetItem *item = new QTableWidgetItem(datos[i]);
-        item->setFlags(item->flags() ^ Qt::ItemIsEditable); // Hacer las celdas no editables
-        tableWidget->setItem(i, 0, item);
-    }
-
-    // Ajustar el tamaño de las columnas automáticamente
-    tableWidget->resizeColumnsToContents();
-    tableWidget->resizeRowsToContents();
-}
-
-QStringList Listadeapuntesform::obtenerTemas(const QString &asignatura)
-{
-    return temasYTerminosPorAsignatura.value(asignatura).first;
-}
-
-QStringList Listadeapuntesform::obtenerTerminos(const QString &asignatura)
-{
-    return temasYTerminosPorAsignatura.value(asignatura).second;
-}
-
-void Listadeapuntesform::on_buttonBox_rejected()
-{
-    this->close(); // Cerrar la subventana
-}
-
-
